@@ -11,47 +11,115 @@
 </head>
 <body>
     <div class="container">
+
         <h2>User Create</h2>
+                
+        @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <form action="/users/create" method="post">
             @csrf
             <div class="form-group">
               <label for="">First Name </label>
-              <input type="text" class="form-control" name="firstname" id="" aria-describedby="emailHelp" placeholder="First Name">
+              <input type="text" class="form-control {{ $errors->has('firstname') ? 'is-invalid' : ''}}"  value="{{old('firstname')}}" name="firstname" id=""  placeholder="First Name">
+              @if ($errors->has('firstname'))
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('firstname')}}</strong>
+              </span>
+              @endif
             </div>
             <div class="form-group">
               <label for="">Last Name</label>
-              <input type="text" class="form-control" name="lastname" id="" placeholder="Last Name">
+              <input type="text" name="lastname" class="form-control  {{ $errors->has('lastname') ? 'is-invalid' : ''}}" value="{{old('lastname')}}"  id="" placeholder="Last Name">
+   
+              @if ($errors->has('lastname'))
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('lastname')}}</strong>
+              </span>
+              @endif
+
             </div>
               <div class="form-group">
                 <label for="">Email</label>
-                <input type="email" class="form-control" name="email" id="" placeholder="Email">
+                <input type="text" class="form-control  {{ $errors->has('email') ? 'is-invalid' : ''}}" value="{{old('email')}}" name="email" id="" placeholder="Email">
+                @if ($errors->has('email'))
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('email')}}</strong>
+              </span>
+              @endif
               </div>
               <div class="form-group">
                 <label for="">Phone Number</label>
-                <input type="text" class="form-control" name="phone" id="" placeholder="Phone Number">
+                <input type="text" class="form-control  {{ $errors->has('phone') ? 'is-invalid' : ''}}" value="{{old('phone')}}" name="phone" id="" placeholder="Phone Number">
+                @if ($errors->has('phone'))
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('phone')}}</strong>
+              </span>
+              @endif
               </div>
+
               <div class="form-group">
                 <label for="">Date of Birth</label>
-                <input type="date" class="form-control" name="date_of_birth" id="" placeholder="Date of birth">
+                {{-- date-date-format="DD MMMM YYYY" --}}
+                <input type="text" class="form-control  {{ $errors->has('date_of_birth') ? 'is-invalid' : ''}}" value="{{old('date_of_birth')}}" name="date_of_birth" id=""  placeholder="dd/mm/yyyy">
+                @if ($errors->has('date_of_birth'))
+                <span class="invalid-feedback" role="alert">
+                  <strong>{{ $errors->first('date_of_birth')}}</strong>
+                </span>
+                @endif
               </div>
               <div class="form-group">
                 <label for="">User Name</label>
-                <input type="text" class="form-control" name="user_name" id="" placeholder="User Name">
+                <input type="text" class="form-control  {{ $errors->has('user_name') ? 'is-invalid' : ''}}" value="{{old('user_name')}}" name="user_name" id="" placeholder="User Name">
+                @if ($errors->has('user_name'))
+                <span class="invalid-feedback" role="alert">
+                  <strong>{{ $errors->first('user_name')}}</strong>
+                </span>
+                @endif
               </div>
 
+      
+            <div class="form-group">
+              <label for="">Pasword</label>
+              <input type="password" class="form-control  {{ $errors->has('password') ? 'is-invalid' : ''}}" value="{{old('password')}}" name="password" id="" placeholder="User Name">
+              @if ($errors->has('password'))
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first('password')}}</strong>
+              </span>
+              @endif
+            </div>
+         
+          <div class="form-group">
+            <label for="">Confirm Password</label>
+            <input type="password" class="form-control  {{ $errors->has('password_confirmation') ? 'is-invalid' : ''}}" value="{{old('password_confirmation')}}" name="password_confirmation" id="" placeholder="User Name">
+            @if ($errors->has('password_confirmation'))
+            <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('password_confirmation')}}</strong>
+            </span>
+            @endif
+          </div>
+
               <hr>
+
              <h1>Your  Profile Information:</h1>
               <div class="form-group">
                 <label for="">Profile images </label>
-                <input type="text" class="form-control" name="peofile_pic" id="" aria-describedby="emailHelp" placeholder="First Name">
+                <input type="text" class="form-control" value="{{old('peofile_pic')}}" name="peofile_pic" id=""  placeholder="Profile Pic">
               </div>
               <div class="form-group">
                 <label for="">Bio </label>
-                <input type="text" class="form-control" name="bio" id="" aria-describedby="emailHelp" placeholder="First Name">
+                <input type="text" class="form-control" value="{{old('bio')}}" name="bio" id=""  placeholder="Bio">
               </div>
               <div class="form-group">
                 <label for="">Address </label>
-                <input type="text" class="form-control" name="address" id="" aria-describedby="emailHelp" placeholder="First Name">
+                <input type="text" class="form-control" value="{{old('address')}}" name="address" id=""  placeholder="Address">
               </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

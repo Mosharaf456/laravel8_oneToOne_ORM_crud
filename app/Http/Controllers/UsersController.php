@@ -19,8 +19,26 @@ class UsersController extends Controller
     {
         return view('users.create');
     }
-    public function store()
+    public function store(Request $request)
     {
+        //form  validation
+        // https://laravel.com/docs/5.8/validation
+        // https://vee-validate.logaretm.com/v3/guide/rules.html#rules
+        $this->validate($request, [
+            'firstname' => ['required' , 'min:3', 'max:20'] ,
+            'lastname' => 'required |min:3 |max:20' ,
+            'email' => 'required | email ' ,
+            'phone' => 'required |numeric' ,
+            'date_of_birth' => 'required |date' ,
+            'user_name' => 'required | alpha_num' ,
+            'password' => 'required |confirmed:password_confirmation' ,
+            'peofile_pic' =>  'required',
+            'bio'=> 'required',
+            'address' => 'required'
+
+
+        ]);
+        // ['Fno' => 'numeric|min:2|max:5', 'Lno' => 'numeric|min:2']
        $user= User::create([
            'firstname' => request('firstname'),
            'lastname' => request('lastname'),
