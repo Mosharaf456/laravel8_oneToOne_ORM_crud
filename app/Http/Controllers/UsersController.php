@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Profile;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
     
     public function index()
     {
+    //   $users= User::paginate(1);
+    //   return view('users.index', compact('users') );
+      
         return view('users.index', [
-            'users' => User::all()
+            // 'users' => User::all()
+            'users' => User::paginate(1)
         ]);
     }
     public function create()
@@ -22,23 +27,42 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         //form  validation
-        // https://laravel.com/docs/5.8/validation
+        // https://laravel.com/docs/8.x/validation#using-rule-objects
         // https://vee-validate.logaretm.com/v3/guide/rules.html#rules
-        $this->validate($request, [
+
+        $rules = [
             'firstname' => ['required' , 'min:3', 'max:20'] ,
             'lastname' => 'required |min:3 |max:20' ,
-            'email' => 'required | email ' ,
+            'email' => 'required | email|unique:users' ,
             'phone' => 'required |numeric' ,
             'date_of_birth' => 'required |date' ,
-            'user_name' => 'required | alpha_num' ,
+            'user_name' => 'required | alpha_num|unique:users' ,
             'password' => 'required |confirmed:password_confirmation' ,
             'peofile_pic' =>  'required',
             'bio'=> 'required',
             'address' => 'required'
+        ];
+        $messages = [
+            'firstname.required' => 'Enter your first name :(',
+            'firstname.min' => 'First name should be minimum length 3 !!'
 
+        ];
+        //From  validations ways
 
-        ]);
-        // ['Fno' => 'numeric|min:2|max:5', 'Lno' => 'numeric|min:2']
+        // $this->validate($request,$rules ,$messages );
+        // request()->validate($rules ,$messages);
+        // $request->validate($rules ,$messages);
+        // 
+        $validator= Validator::validate($request->all(),$rules,$messages);
+
+        // Another way
+        // $validator= Validator::make($request->all(),$rules,$messages);
+        // if( $validator->fails())
+        // {
+        //     return back()->withErrors($validator)->withInput();
+        // }
+
+      
        $user= User::create([
            'firstname' => request('firstname'),
            'lastname' => request('lastname'),
@@ -55,16 +79,9 @@ class UsersController extends Controller
        ]);
 
        //to check errors
-    //    dd(request()->all());
-
-    //    Profile::create([
-    //        'peofile_pic' => request('peofile_pic'),
-    //        'bio' => request('bio'),
-    //        'address' => request('address'),
-    //        'owner_id' => $user->id
-
-    //    ]);
+        // dd(request()->all());
         // return back();
+
         return redirect('/users');
     }
 
