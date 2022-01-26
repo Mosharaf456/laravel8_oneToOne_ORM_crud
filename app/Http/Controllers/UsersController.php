@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Rules\MaxValue100;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,8 +17,8 @@ class UsersController extends Controller
     //   return view('users.index', compact('users') );
       
         return view('users.index', [
-            // 'users' => User::all()
-            'users' => User::paginate(1)
+            'users' => User::all()
+            // 'users' => User::paginate(1)
         ]);
     }
     public function create()
@@ -34,7 +35,8 @@ class UsersController extends Controller
             'firstname' => ['required' , 'min:3', 'max:20'] ,
             'lastname' => 'required |min:3 |max:20' ,
             'email' => 'required | email|unique:users' ,
-            'phone' => 'required |numeric' ,
+            // laravel convention of custom validation
+            'phone' => ['required' ,'numeric' ,new MaxValue100] ,
             'date_of_birth' => 'required |date' ,
             'user_name' => 'required | alpha_num|unique:users' ,
             'password' => 'required |confirmed:password_confirmation' ,
@@ -96,12 +98,32 @@ class UsersController extends Controller
         $user = User::find($id);
         return view('users.edit',compact('user'));
     }
-    
+        
     public function update($id)
     {
         $user = User::find($id);
         // firstname lastname email phone date_of_birth user_name
             // peofile_pic  bio  address
+            
+        $rules = [
+            'firstname' => ['required' , 'min:3', 'max:20'] ,
+            'lastname' => 'required |min:3 |max:20' ,
+            'email' => 'required | email|unique:users,id,{$id}' ,
+            // laravel convention of custom validation
+            'phone' => ['required' ,'numeric' ,new MaxValue100] ,
+            'date_of_birth' => 'required |date' ,
+            'user_name' => 'required | alpha_num|unique:users,id,{$id}' ,
+            'password' => 'required |confirmed:password_confirmation' ,
+            'peofile_pic' =>  'required',
+            'bio'=> 'required',
+            'address' => 'required'
+        ];
+        request()->validate($rules);
+
+        // $country_code = request('code'); //+880
+        // $phone = request('phone');//74569298
+        // $final_phone = $country_code . $phone;
+
         $user->update([
             'firstname' =>  request('firstname'),
             'lastname' => request('lastname'),
@@ -117,6 +139,7 @@ class UsersController extends Controller
             'bio' => request('bio'),
             'address' => request('address')
         ]);
+
 
         return redirect('/users');
     }

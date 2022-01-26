@@ -13,6 +13,15 @@
 <body>
     <div class="container">
 
+      {{-- Odd id show --}}
+      @foreach ($users as $user)    
+          @if ( $user->id % 2 != 0)
+          <br>
+            <td>ODD_ID:{{$user->id}}</td>
+            <br>
+          @endif
+      @endforeach
+       {{-- All details --}}
         <table class="table">
             <thead>
               <tr>
@@ -27,7 +36,7 @@
               </tr>
             </thead>
             <tbody>
-             
+            
             @foreach ($users as $user)
                 <tr>
                     <td>{{$user->id}}</td>
@@ -50,9 +59,9 @@
           </table>
 
            {{-- Pagination --}}
-         <div class="d-flex justify-content-center">
+         {{-- <div class="d-flex justify-content-center">
              {!! $users->links() !!}
-         </div>
+         </div> --}}
     </div>
 </body>
 </html>

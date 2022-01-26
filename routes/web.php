@@ -23,6 +23,7 @@ Route::get('/users/{id}/edit','UsersController@edit');
 Route::patch('/users/{id}/edit','UsersController@update');
 
 // delete
-
 Route::delete('/users/{id}/delete','UsersController@destroy'); 
+
+
 
