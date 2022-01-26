@@ -8,6 +8,9 @@ use App\Rules\MaxValue100;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmationEmail;
+
 class UsersController extends Controller
 {
     
@@ -149,5 +152,31 @@ class UsersController extends Controller
         $user->profile->delete();
         $user->delete();
         return redirect('/users');
+    }
+// send mail to users
+    public function sendmail()
+    {
+        return view('mails.confirmation');
+    }
+    public function sending()
+    {
+        request()->validate([
+            'email' => 'required | email',
+            'body' => 'required'
+        ]);
+        $to = request('mail');
+        $body = request('body');
+
+        // mail sending process
+
+        $obj = new \stdClass();
+        // 1st way
+        // $obj->message = $body;
+        //2nd way
+        $obj->users = User::all();
+        Mail::to($to)->send( new ConfirmationEmail($obj) );
+
+
+
     }
 }

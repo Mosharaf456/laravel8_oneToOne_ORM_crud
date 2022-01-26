@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/users/sendmail','UsersController@sendmail');
+// insert new data
+Route::post('/users/sendmail','UsersController@sending');
 // show all users data
 Route::get('/users','UsersController@index');
 Route::get('/profiles','ProfilesController@index');
